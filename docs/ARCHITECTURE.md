@@ -28,3 +28,94 @@ Track model load, STT, LLM first-token/total, TTS and end-to-end separately. The
 ## API contracts
 
 Document exact schemas in `docs/API.md` before wiring web and API. Do not invent implemented routes.
+
+---
+
+## Milestone 1: Text Conversation Architecture
+
+### Runtime Flow
+
+```text
+HTTP Client
+    |
+    | POST /chat
+    v
+FastAPI
+    |
+    v
+Chat Router
+    |
+    v
+Pydantic Validation
+    |
+    v
+LLMService
+    |
+    v
+Ollama HTTP API
+    |
+    v
+Qwen3.5 9B
+    |
+    v
+JSON Response
+```
+
+### Backend Structure
+
+```text
+apps/api/
+├── main.py
+├── app/
+│   ├── api/
+│   │   └── routes/
+│   │       ├── health.py
+│   │       └── chat.py
+│   ├── core/
+│   │   └── config.py
+│   ├── schemas/
+│   │   └── chat.py
+│   └── services/
+│       └── llm.py
+└── tests/
+```
+
+### Dependency Rules
+
+1. API routers may depend on schemas and services.
+2. Services may depend on schemas and configuration.
+3. Services must not import API routers.
+4. Schemas must not depend on service implementations.
+5. Ollama HTTP calls must remain inside the LLM service.
+6. Frontend code must not communicate directly with Ollama.
+
+### Future Voice Architecture
+
+```text
+Next.js
+   |
+   v
+FastAPI
+   |
+   +-- STT Service (Whisper)
+   |
+   +-- LLM Service (Ollama)
+   |
+   +-- TTS Service (Kokoro)
+   |
+   v
+Audio Response
+```
+
+STT, LLM, and TTS must remain independently replaceable.
+
+### Current Limitations
+
+- No streaming
+- No persistent conversation sessions
+- No audio input or output
+- No pronunciation assessment
+- No authentication
+- No database
+
+These limitations are intentional for M1.

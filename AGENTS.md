@@ -34,3 +34,55 @@ No secrets or raw personal audio in git. Validate upload type/size and limit rec
 ## Definition of done
 
 Acceptance criteria met; lint/typecheck/tests relevant to change run or explicitly deferred; docs consistent; no unrelated refactors; clear handoff summary.
+
+---
+
+## Project Continuity Protocol
+
+Before starting implementation work:
+
+1. Read `docs/PROJECT_STATUS.md`.
+2. Read `docs/PRODUCT.md`.
+3. Read `docs/ARCHITECTURE.md`.
+4. Read the relevant task file in `docs/tasks/`.
+5. Read the relevant application-level `AGENTS.md`.
+6. Check existing implementation before proposing changes.
+
+### Scope Control
+
+- Work only on the active milestone unless explicitly instructed.
+- Do not implement future milestones prematurely.
+- Do not introduce new infrastructure without justification.
+- Do not replace accepted architectural decisions silently.
+- Prefer small, independently verifiable changes.
+
+### Completion Protocol
+
+After completing a task:
+
+1. Run relevant lint and type checks.
+2. Run available tests.
+3. Update API documentation if contracts changed.
+4. Update architecture documentation if boundaries changed.
+5. Update the active task status.
+6. Update `docs/PROJECT_STATUS.md`.
+7. Report completed work and remaining issues.
+
+### Source of Truth
+
+- `docs/PRODUCT.md`: Product requirements
+- `docs/ARCHITECTURE.md`: System architecture
+- `docs/DECISIONS.md`: Technical decisions
+- `docs/API.md`: API contracts
+- `docs/PROJECT_STATUS.md`: Current progress
+- `docs/tasks/`: Task-specific requirements
+
+If documents conflict, do not silently choose one.
+Identify the conflict and request clarification.
+
+### Verification Integrity
+
+Never claim that a test, build, or command passed
+unless it was actually executed successfully.
+
+Do not mark incomplete work as completed.
