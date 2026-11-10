@@ -1,0 +1,62 @@
+default_language_version:
+  python: python3.11
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: detect-private-key
+
+  # Python: Ruff lint + format
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        files: ^apps/api/.*\.py$
+
+      - id: ruff-format
+        files: ^apps/api/.*\.py$
+
+  # Local hooks
+  - repo: local
+    hooks:
+      # Web: Prettier
+      - id: prettier-web
+        name: Prettier (Web)
+        entry: bash scripts/prettier-web.sh
+        language: system
+        files: ^apps/web/.*\.(js|jsx|mjs|cjs|ts|tsx|css|scss|json|html|md|mdx|yaml|yml)$
+        pass_filenames: false
+
+      # Web: ESLint
+      - id: eslint-web
+        name: ESLint (Web)
+        entry: bash scripts/eslint-web.sh
+        language: system
+        files: ^apps/web/.*\.(js|jsx|mjs|cjs|ts|tsx)$
+        pass_filenames: false
+
+      # Web: TypeScript
+      - id: typecheck-web
+        name: TypeScript Type Check
+        entry: bash scripts/typecheck-web.sh
+        language: system
+        files: ^apps/web/.*\.(ts|tsx)$
+        pass_filenames: false
+        stages: [pre-push]
+
+      # Agent Harness
+      - id: check-harness
+        name: Agent Harness Validation
+        entry: bash scripts/check-harness.sh
+        language: system
+        files: ^(AGENTS\.md|apps/(api|web)/AGENTS\.md|docs/|scripts/check-harness\.sh)
+        pass_filenames: false
